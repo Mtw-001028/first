@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>有关数据结构与算法介绍</title>
+    <link rel="stylesheet" href="./css/bootstrap.css">
+    <link rel="stylesheet" href="./css/free.css">
+    <link rel="stylesheet" href="./css/icon.css">
+    <script src="./js/vue.js"></script>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        .box{
+            width: 1100px;
+            height: 680px;
+            margin: 20px auto;
+            background-color: #efefef;
+        }
+        .main{
+            width: 1000px;
+            height: 620px;
+            margin: 20px auto;
+            /*background-color: red;*/
+            overflow: hidden;
+            overflow-y: scroll;
+            white-space: nowrap;
+        }
+    </style>
+</head>
+<body>
+    <script src="./js/jquery-3.5.1.js"></script>
+    <script src="./js/bootstrap.bundle.js"></script>
+    <div id="app" class="box ">
+        <h4 style="height: 30px;text-align: center;line-height: 50px">
+            有关数据结构与算法介绍
+        </h4>
+        <div class="main">
+            <div v-for="(item,index) in list" :key="index" :class="(index % 2 == 1 ? '' : 'flex-row-reverse')" class="flex align-center justify-center"
+                 style="background-color: #ffffff;width: 98%;min-height: 200px;border-radius: 10px;margin-top: 20px">
+                <img src="./img/this1.jpg" alt="" style="width: 250px;height: 150px;border-radius: 5px;margin-left: 30px;margin-right: 30px;">
+                <div style="width: 600px;margin-left: 30px;margin-right: 30px;min-height: 150px;">
+                    <h4 style="margin-top: 20px;margin-left: 10px">{{item.title}}</h4>
+                    <p class="text-capitalize" style="width: 100%;height: auto;word-break:break-all;white-space:pre-wrap;word-wrapL:break-word;"><ins ><em>{{item.content}}</em></ins></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+
+        let vm = new Vue({
+            el:'#app',
+            data(){
+                return{
+                    msg:'11111',
+                    list:[
+                        {
+                            title:'贪心算法',
+                            content:'       贪婪算法(贪心算法)是指在对问题进行求解时，在每一步选择中都采取最好或者最优(即最有利)的选择，从而希望能够导致结果是最好或者最优的算法。\n'
+                                +'        贪婪算法所得到的结果不一定是最优的结果(有时候会是最优解)，但是都是相对近似(接近)最优解的结果。'
+                        },
+                        {
+                            title:'KMP 算法',
+                            content:'       KMP 是一个解决模式串在文本串是否出现过，如果出现过，最早出现的位置的经典算法。\n' +
+                                '       Knuth-Morris-Pratt 字符串查找算法，简称为 “KMP 算法”，常用于在一个文本串 S 内查找一个模式串 P 的出现位置，这个算法由 Donald Knuth、Vaughan Pratt、James H. Morris 三人于 1977 年联合发表，故取这 3 人的姓氏命名此算法。\n'
+                                +
+                                '       KMP 方法算法就利用之前判断过信息，通过一个 next 数组，保存模式串中前后最长公共子序列的长度，每次回溯时，通过 next 数组找到，前面匹配过的位置，省去了大量的计算时间。'
+                        },
+                        {
+                            title:'暴力匹配算法',
+                            content:'       暴力匹配的思路，并假设现在 str1 匹配到 i 位置，子串 str2 匹配到 j 位置，则有:\n' +
+                                '（1） 如果当前字符匹配成功（即 str1[i] == str2[j]），则 i++，j++，继续匹配下一个字符\n' +
+                                '（2） 如果失配（即 str1[i]! = str2[j]），令 i = i - (j - 1)，j = 0。相当于每次匹配失败时，i 回溯，j 被置为 0。\n' +
+                                '（3）用暴力方法解决的话就会有大量的回溯，每次只移动一位，若是不匹配，移动到下一位接着判断，浪费了大量的时间。'
+                        },
+                        {
+                            title:'分治算法',
+                            content:'分治法是一种很重要的算法。字面上的解释是“分而治之”，就是把一个复杂的问题分成两个或更多的相同或相似的子问题，再把子问题分成更小的子问题……直到最后子问题可以简单的直接求解，' +
+                                '原问题的解即子问题的解的合并。这个技巧是很多高效算法的基础，如排序算法(快速排序，归并排序)，傅立叶变换(快速傅立叶变换)……'
+                        },
+                        {
+                            title:'B树',
+                            content:'B树(B-Tree)是一种自平衡的树,它是一种多路搜索树（并不是二叉的），能够保证数据有序。同时它还保证了在查找、插入、删除等操作时性能都能保持在O(logn)，为大块数据的读写操作做了优化,同时它也可以用来描述外部存储(支持对保存在磁盘或者网络上的符号表进行外部查找)'
+                        },
+                        {
+                            title:'红黑树',
+                            content:'这是一种自平衡二叉查找树，通过对任何一条从根到叶子的路径上各个节点着色的方式的限制，红黑树确保从根到叶子节点的最长路径不会是最短路径的两倍，用非严格的平衡来换取增删节点时候旋转次数的降低，任何不平衡都会在三次旋转之内解决。'
+                        },
+                        {
+                            title:'AVL树',
+                            content:'       AVL树是带有平衡条件的二叉查找树，和红黑树相比，它是严格的平衡二叉树，平衡条件必须满足(所有节点的左右子树高度差不超过1)。不管我们是执行插入还是删除操作，只要不满足上面的条件，就要通过旋转来保持平衡,而旋转是非常耗时的。\n' +
+                                '        AVL树适合用于插入删除次数比较少，但查找多的情况。 也在Windows进程地址空间管理中得到了使用旋转的目的是为了降低树的高度，使其平衡。\n' +
+                                '        AVL树是一棵二叉搜索树，AVL树的左右子节点也是AVL树，AVL树拥有二叉搜索树的所有基本特点，每个节点的左右子节点的高度之差的绝对值最多为1，即平衡因子为范围为[-1,1]。'
+                        },
+                    ]
+                }
+            }
+        })
+
+    </script>
+</body>
+</html>
