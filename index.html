@@ -2,102 +2,234 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>有关数据结构与算法介绍</title>
-    <link rel="stylesheet" href="./css/bootstrap.css">
-    <link rel="stylesheet" href="./css/free.css">
-    <link rel="stylesheet" href="./css/icon.css">
+    <title>医疗</title>
+
+
     <script src="./js/vue.js"></script>
+    <link href="./css/allCss.css" rel="stylesheet" type="text/css"/>
+    <link href="./css/icon.css" rel="stylesheet" type="text/css"/>
+
     <style>
         *{
             margin: 0;
             padding: 0;
         }
-        .box{
-            width: 1100px;
-            height: 680px;
-            margin: 20px auto;
-            background-color: #efefef;
+        body{
+            width: 100%;
+            height: 100%;
         }
-        .main{
-            width: 1000px;
-            height: 620px;
-            margin: 20px auto;
-            /*background-color: red;*/
-            overflow: hidden;
-            overflow-y: scroll;
-            white-space: nowrap;
+        .liebiaoHoverNot{
+            color: black;
+        }
+        .liebiaoHover:hover{
+            background-color: #00C6A9;
+            color: white;
+        }
+        .hover-not{
+            color: #5c5a5a;
+        }
+        .hover-on:hover{
+            color: white;
+        }
+        a{
+            text-decoration: none;
         }
     </style>
 </head>
 <body>
-    <script src="./js/jquery-3.5.1.js"></script>
-    <script src="./js/bootstrap.bundle.js"></script>
-    <div id="app" class="box ">
-        <h4 style="height: 30px;text-align: center;line-height: 50px">
-            有关数据结构与算法介绍
-        </h4>
-        <div class="main">
-            <div v-for="(item,index) in list" :key="index" :class="(index % 2 == 1 ? '' : 'flex-row-reverse')" class="flex align-center justify-center"
-                 style="background-color: #ffffff;width: 98%;min-height: 200px;border-radius: 10px;margin-top: 20px">
-                <img src="./img/this1.jpg" alt="" style="width: 250px;height: 150px;border-radius: 5px;margin-left: 30px;margin-right: 30px;">
-                <div style="width: 600px;margin-left: 30px;margin-right: 30px;min-height: 150px;">
-                    <h4 style="margin-top: 20px;margin-left: 10px">{{item.title}}</h4>
-                    <p class="text-capitalize" style="width: 100%;height: auto;word-break:break-all;white-space:pre-wrap;word-wrapL:break-word;"><ins ><em>{{item.content}}</em></ins></p>
+<div style="width: 1100px;height: 700px;margin: 10px auto;border: 1px solid #00C6A9" id="app">
+    <!--    头部-->
+    <div class="flex back-color justify-between align-center" style="width: 100%;height: 60px;">
+        <div class="flex">
+<!--            <p @click="change" class="iconfont icon-caidan m-l1 hover-not hover-on"></p>-->
+            <p class="iconfont icon-sousuo m-l1 hover-not hover-on"></p>
+            <a href="./htmls/indexCompletionReport.html"><p>《web应用基础》课程结业报告</p></a>
+        </div>
+        <div CLASS="flex flex-column align-center justify-center" >
+            <h3 style="color: white">医乡情缘</h3>
+            <p style="color: white;font-size: 12px">YI XIANG QING YUAN</p>
+        </div>
+        <div class="flex hover-not hover-on">
+            <p class="iconfont icon-haoyou "></p>
+            <p class="m-r2" style="font-size: 14px;margin-left: 4px">登录</p>
+        </div>
+    </div>
+
+<!--    主体-->
+    <div class="flex " style="width: 100%;height: 560px;background-color: white">
+<!--        列表-->
+        <div v-show="isShow" class="flex-1 " style="background-color: #f3ebeb">
+<!--            上-->
+            <div class="flex align-center" style="width: 100%;height: 65%;">
+                <div class="flex flex-column" style="height: 80%;width: 100%">
+                    <a @click="downButton(index)"  v-for="(item,index) in allButtons" :key="index" class="flex-1 flex align-center justify-start p-l1 liebiaoHover liebiaoHoverNot" >
+                        <p>{{item.name}}</p>
+                    </a>
+                </div>
+            </div>
+<!--            下-->
+            <div class="flex align-center" style="width: 100%;height: 35%;border-top: 1px solid black">
+                <div class="flex flex-column " style="height: 80%;width: 100%;">
+                    <a  class="flex-1 flex align-center justify-start p-l1 liebiaoHover" >
+                        <p class="iconfont icon-caidan m-r2"></p>
+                        <p>个人中心</p>
+                    </a>
+                    <a  class="flex-1 flex align-center justify-start p-l1 liebiaoHover" >
+                        <p class="iconfont icon-caidan m-r2"></p>
+                        <p>在线服务</p>
+                    </a>
+                    <a  class="flex-1 flex align-center justify-start p-l1 liebiaoHover" >
+                        <p class="iconfont icon-caidan m-r2"></p>
+                        <p>服务热线</p>
+                    </a>
                 </div>
             </div>
         </div>
+<!--        广告内容-->
+        <div class="flex-4 flex justify-center align-center">
+            <div v-show="!contentShow" style="width: 700px;height: 500px;">
+                <p style="text-align: center;margin-bottom: 10px">为居住在农村的您提供便捷的医疗服务</p>
+                <img src="./img/yixiangqingyuan.jpg" style="width: 100%;height: 90%;border: 1px solid black">
+
+            </div>
+            <div v-show="contentShow" class="flex align-center flex-column" style="width: 700px;height: 400px;background-color: #f1f1f1">
+                <h2 style="margin-top: 20px">{{allData[indexData].title}}</h2>
+                <div class="flex flex-wrap" style="width: 80%;height: 65%;background-color: #e0dfdf;margin-top: 20px">
+
+<!--                    非大病问诊显示-->
+                    <p v-if="indexData!=1" v-for="(item1,index1) in allData[indexData].list" :key="index1"  style="font-size: 18px;margin: 20px">{{item1}}</p>
+
+<!--                    大病问诊显示-->
+                    <div v-if="indexData==1" v-for="(item2,index2) in allData[indexData].list" :key="index2" class="flex m-l2 m-t2">
+                        <img style="width: 70px;height: 70px;margin-right: 5px" :src="item2.url">
+                        <div>
+                            <p style="font-size: 16px;margin-top: 5px">{{item2.name}}</p>
+                            <p style="font-size: 14px;margin-top: 15px">{{item2.do}}</p>
+                        </div>
+                    </div>
+                </div>
+                <a :href="'./htmls/page'+(indexData+1)+'.html'" style="width: 80%;text-align: right;margin-top: 20px"><p >——更多详情请展开</p></a>
+            </div>
+        </div>
     </div>
-    <script>
 
-        let vm = new Vue({
-            el:'#app',
-            data(){
-                return{
-                    msg:'11111',
-                    list:[
-                        {
-                            title:'贪心算法',
-                            content:'       贪婪算法(贪心算法)是指在对问题进行求解时，在每一步选择中都采取最好或者最优(即最有利)的选择，从而希望能够导致结果是最好或者最优的算法。\n'
-                                +'        贪婪算法所得到的结果不一定是最优的结果(有时候会是最优解)，但是都是相对近似(接近)最优解的结果。'
-                        },
-                        {
-                            title:'KMP 算法',
-                            content:'       KMP 是一个解决模式串在文本串是否出现过，如果出现过，最早出现的位置的经典算法。\n' +
-                                '       Knuth-Morris-Pratt 字符串查找算法，简称为 “KMP 算法”，常用于在一个文本串 S 内查找一个模式串 P 的出现位置，这个算法由 Donald Knuth、Vaughan Pratt、James H. Morris 三人于 1977 年联合发表，故取这 3 人的姓氏命名此算法。\n'
-                                +
-                                '       KMP 方法算法就利用之前判断过信息，通过一个 next 数组，保存模式串中前后最长公共子序列的长度，每次回溯时，通过 next 数组找到，前面匹配过的位置，省去了大量的计算时间。'
-                        },
-                        {
-                            title:'暴力匹配算法',
-                            content:'       暴力匹配的思路，并假设现在 str1 匹配到 i 位置，子串 str2 匹配到 j 位置，则有:\n' +
-                                '（1） 如果当前字符匹配成功（即 str1[i] == str2[j]），则 i++，j++，继续匹配下一个字符\n' +
-                                '（2） 如果失配（即 str1[i]! = str2[j]），令 i = i - (j - 1)，j = 0。相当于每次匹配失败时，i 回溯，j 被置为 0。\n' +
-                                '（3）用暴力方法解决的话就会有大量的回溯，每次只移动一位，若是不匹配，移动到下一位接着判断，浪费了大量的时间。'
-                        },
-                        {
-                            title:'分治算法',
-                            content:'分治法是一种很重要的算法。字面上的解释是“分而治之”，就是把一个复杂的问题分成两个或更多的相同或相似的子问题，再把子问题分成更小的子问题……直到最后子问题可以简单的直接求解，' +
-                                '原问题的解即子问题的解的合并。这个技巧是很多高效算法的基础，如排序算法(快速排序，归并排序)，傅立叶变换(快速傅立叶变换)……'
-                        },
-                        {
-                            title:'B树',
-                            content:'B树(B-Tree)是一种自平衡的树,它是一种多路搜索树（并不是二叉的），能够保证数据有序。同时它还保证了在查找、插入、删除等操作时性能都能保持在O(logn)，为大块数据的读写操作做了优化,同时它也可以用来描述外部存储(支持对保存在磁盘或者网络上的符号表进行外部查找)'
-                        },
-                        {
-                            title:'红黑树',
-                            content:'这是一种自平衡二叉查找树，通过对任何一条从根到叶子的路径上各个节点着色的方式的限制，红黑树确保从根到叶子节点的最长路径不会是最短路径的两倍，用非严格的平衡来换取增删节点时候旋转次数的降低，任何不平衡都会在三次旋转之内解决。'
-                        },
-                        {
-                            title:'AVL树',
-                            content:'       AVL树是带有平衡条件的二叉查找树，和红黑树相比，它是严格的平衡二叉树，平衡条件必须满足(所有节点的左右子树高度差不超过1)。不管我们是执行插入还是删除操作，只要不满足上面的条件，就要通过旋转来保持平衡,而旋转是非常耗时的。\n' +
-                                '        AVL树适合用于插入删除次数比较少，但查找多的情况。 也在Windows进程地址空间管理中得到了使用旋转的目的是为了降低树的高度，使其平衡。\n' +
-                                '        AVL树是一棵二叉搜索树，AVL树的左右子节点也是AVL树，AVL树拥有二叉搜索树的所有基本特点，每个节点的左右子节点的高度之差的绝对值最多为1，即平衡因子为范围为[-1,1]。'
-                        },
-                    ]
-                }
+
+<!--    尾部-->
+    <div class="flex flex-column justify-center align-center" style="width: 100%;height: 80px;background-color: #00C6A9">
+        <div class="flex justify-between m-t2" style="width: 400px">
+            <p class="hover-not hover-on" style="font-size: 15px;height: 23px;line-height: 23px">关于我们</p>
+            <p class="hover-not hover-on" style="font-size: 15px;height: 23px;line-height: 23px">联系我们</p>
+            <p class="hover-not hover-on" style="font-size: 15px;height: 23px;line-height: 23px">关注我们</p>
+        </div>
+        <p style="font-size: 8px;margin-top: 15px">"医乡情缘"工作室享有网站最终解释权</p>
+    </div>
+
+
+</div>
+<script>
+
+    //创建一个vue实例--与ID为root的结点进行绑定--data 是vue实例中的一些数据存放地点
+
+    new Vue({
+        el:"#app",
+        data(){
+            return{
+                indexData:0,
+                isShow:true,
+                isDown:true,
+                contentShow:false,
+                allButtons:[
+                    {
+                        name:'小病自测',
+                        url:"./htmls/page1.html"
+                    },
+                    {
+                        name:'大病问诊',
+                        url:"./htmls/page2.html"
+                    },
+                    {
+                        name:'定期上门检查',
+                        url:"./htmls/page3.html"
+                    },
+                    {
+                        name:'紧急送药',
+                        url:"./htmls/page4.html"
+                    },
+                    {
+                        name:'心理健康调查与疏导',
+                        url:"./htmls/page5.html"
+                    },
+                    {
+                        name:'老人与儿童关怀服务',
+                        url:"./htmls/page6.html"
+                    }],
+                allData:[
+                    {
+                        title:'小病自测',
+                        list:["全身症状","头颈部症状","胸部症状","腹部症状","四肢症状","皮肤症状","分泌排泄症状","两性症状","其他症状"]
+                    },
+                    {
+                        title:'大病问诊',
+                        list:[
+                            {
+                                url:"./img/the1.jpg",
+                                name:"王医生（乡医）",
+                                do:"擅长：外科常见疾病"
+                            },
+                            {
+                                url:"./img/the2.jpg",
+                                name:"李医生（乡医）",
+                                do:"擅长：外科手术"
+                            },
+                            {
+                                url:"./img/the3.jpg",
+                                name:"周医生（乡医）",
+                                do:"擅长：外科常见疾病"
+                            }
+                        ]
+                    },
+                    {
+                        title:'定期上门检查',
+                        list:["可预约项目","测血压","针灸按摩","保健","康复训练"]
+                    },
+                    {
+                        title:'紧急送药',
+                        list:["非处方药","感冒用药","妇科用药","抗菌消炎","男科用药","儿童用药","消化系统","呼吸系统","皮肤用药"]
+                    },
+                    {
+                        title:'心理健康调查与疏导',
+                        list:["测试项目一","测试项目二","测试项目三"]
+                    },
+                    {
+                        title:'老人儿童关怀服务',
+                        list:["可预约项目","上门理发","上门按摩"]
+                    },
+
+                ],
+
             }
-        })
+        },
+        methods:{
+            change(){
+                this.isShow = !this.isShow;
+            },
+            downButton(index){
+                // if(!this.isDown) return;
+                // this.isDown = false;
 
-    </script>
+                this.indexData = index;
+                this.contentShow = true;
+                // setTimeout(()=>{
+                //     this.contentShow = false;
+                //     this.isDown = true;
+                // },3000)
+                console.log(this.indexData);
+            }
+        }
+
+    })
+
+</script>
+<!--    <div v-for="i in 10" style="width: 100px;height: 100px;background-color: red"></div>-->
 </body>
 </html>

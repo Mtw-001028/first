@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>医疗</title>
+
+
+    <script src="./js/vue.js"></script>
+    <link href="./css/allCss.css" rel="stylesheet" type="text/css"/>
+    <link href="./css/icon.css" rel="stylesheet" type="text/css"/>
+
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        body{
+            width: 100%;
+            height: 100%;
+        }
+        .hover-not{
+            color: #5c5a5a;
+        }
+        .hover-on:hover{
+            color: white;
+        }
+        a{
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+<div style="width: 1100px;height: 700px;margin: 10px auto;border: 1px solid #00C6A9" id="app">
+    <!--    头部-->
+    <div style="width: 100%;height: 120px;" class="flex back-color">
+        <div class="flex align-center" style="width: 35%;height: 120px;">
+            <img class="m-r2 m-l3" style="width: 55px;height: 55px" src="img/yixiangqingyuan.jpg">
+            <div style="width: 200px;">
+                <h1  style="font-size: 30px;color: white;">医乡情缘</h1>
+                <p class="m-b1" style="color: white;">农村医疗健康服务平台</p>
+            </div>
+        </div>
+        <div class="flex justify-center " style="width: 35%;height: 120px;">
+            <div class="flex m-t4 m-r3">
+                <input class="p-l1 p-r1" style="height: 30px;font-size: 16px" v-model="search" placeholder="search医生、症状、服务" type="text">
+                <p class="m-l1 hover-on m-r3" style="font-size: 17px;line-height: 30px;">搜索</p>
+            </div>
+        </div>
+        <div class="flex flex-column" style="width: 30%;height: 120px;">
+            <div class="flex m-t2 m-l10" >
+                <p class="iconfont icon-haoyou hover-not" style="font-size: 17px;"></p>
+                <p class="hover-on hover-not" style="font-size: 12px;line-height: 20px;">登录</p>
+                <p class="iconfont icon-zhengque hover-not m-l1" style="font-size: 17px;"></p>
+                <p class="hover-on hover-not" style="font-size: 12px;line-height: 20px;">注册</p>
+                <p class="iconfont icon-fabu hover-not m-l1" style="font-size: 17px;"></p>
+                <p class="hover-on hover-not" style="font-size: 12px;line-height: 20px;">帮助</p>
+                <p class="iconfont icon-caidan hover-not m-l1" style="font-size: 17px;"></p>
+                <p class="hover-on hover-not" style="font-size: 12px;line-height: 20px;">设置</p>
+            </div>
+            <div class="m-l10 m-t2" style="font-size: 30px;color: white">欢迎使用</div>
+        </div>
+    </div>
+
+    <!--    主体-->
+    <div class="flex" style="width: 100%;height: 530px;">
+        <!--        左侧显示-->
+        <div class="flex flex-column" style="width: 70%;height: 100%;">
+            <!--            平台服务-->
+            <div class="flex flex-column" style="width: 100%;height: 90px;">
+                <h2 class="m-t1 m-l2" >平台服务</h2>
+                <div style="margin-top: 15px">
+                    <a v-for="(item,index) in allButtons" :key="index" :href="item.url" class="m-l3"><button  style="font-size: 15px">{{item.name}}</button></a>
+                </div>
+            </div>
+
+            <!--            详情-->
+            <a href="./htmls/page1.html">
+                <div class="flex flex-column" style="height: 70px;background-color: #e7dcdc">
+                    <h4 class="m-t-5 m-l3">小病自测</h4>
+                    <p class="m-t1 m-l5" style="font-size: 13px;">{{data1}}</p>
+                </div>
+            </a>
+            <a href="./htmls/page2.html">
+                <div class="flex flex-column" style="height: 90px;">
+                    <h4 class="m-t-5 m-l3">大病问诊</h4>
+                    <div class="flex m-t1 m-l1">
+                        <div v-for="(item,index) in data2" :key="index" class="flex m-l2">
+                            <img style="width: 45px;height: 45px;margin-right: 5px" :src="item.url">
+                            <div>
+                                <p style="font-size: 14px;margin-top: 5px">{{item.name}}</p>
+                                <p style="font-size: 13px">{{item.do}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+            <a href="./htmls/page3.html">
+                <div class="flex flex-column" style="height: 70px;background-color: #e7dcdc">
+                    <h4 class="m-t-5 m-l3">紧急送药</h4>
+                    <p class="m-t1 m-l5" style="font-size: 13px;">{{data3}}</p>
+                </div>
+            </a>
+            <a href="./htmls/page4.html">
+                <div class="flex flex-column" style="height: 70px;">
+                    <h4 class="m-t-5 m-l3">定期上门检查</h4>
+                    <p class="m-t1 m-l5" style="font-size: 13px;">{{data4}}</p>
+                </div>
+            </a>
+            <a href="./htmls/page5.html">
+                <div class="flex flex-column" style="height: 70px;background-color: #e7dcdc">
+                    <h4 class="m-t-5 m-l3">心理健康调查与疏导</h4>
+                    <p class="m-t1 m-l5" style="font-size: 13px;">{{data5}}</p>
+                </div>
+            </a>
+            <a href="./htmls/page6.html">
+                <div class="flex flex-column" style="height: 70px;">
+                    <h4 class="m-t-5 m-l3">老人儿童关怀服务</h4>
+                    <p class="m-t1 m-l5" style="font-size: 13px;">{{data6}}</p>
+                </div>
+            </a>
+        </div>
+        <!--        右侧显示-->
+        <div style="width: 30%;height: 100%;">
+            <div v-for="(item,index) in newsDatas" :key="index" style="width: 99%;height: 33%;border: 1px solid #000000">
+                <h4 class="m-l1 m-t1">{{item.title}}</h4>
+                <textarea disabled style="width: 90%;height: 120px;font-size: 14px;line-height: 25px;color: black;background-color: white;
+                resize: none;border: none;margin-top: 10px" class="m-l2 ">{{item.data}}</textarea>
+            </div>
+        </div>
+    </div>
+
+    <!--    尾部-->
+    <div class="back-color flex align-center" style="width: 100%;height: 50px;">
+        <p class="hover-on m-l5" v-for="(item,index) in ourDatas" :key="index" style="font-size: 14px;">{{item}}</p>
+    </div>
+</div>
+<script>
+
+    //创建一个vue实例--与ID为root的结点进行绑定--data 是vue实例中的一些数据存放地点
+
+    new Vue({
+        el:"#app",
+        data(){
+            return{
+                search:"",
+                data1:"全身症状 | 头颈部症状 | 胸部症状 | 腹部症状 | 四肢症状 | 皮肤症状 | 分泌排泄症状 | 两性症状 | 其他症状",
+                data2:[
+                    {
+                        url:"./img/the1.jpg",
+                        name:"王医生（乡医）",
+                        do:"擅长：外科常见疾病"
+                    },
+                    {
+                        url:"./img/the2.jpg",
+                        name:"李医生（乡医）",
+                        do:"擅长：外科手术"
+                    },
+                    {
+                        url:"./img/the3.jpg",
+                        name:"周医生（乡医）",
+                        do:"擅长：外科常见疾病"
+                    }
+                ],
+                data3:"非处方药：感冒用药 | 妇科用药 | 抗菌消炎 | 男科用药 | 儿童用药 | 消化系统 | 呼吸系统 | 皮肤用药",
+                data4:"可预约项目：测血压 | 针灸按摩 | 保健  |康复训练",
+                data5:"测试项目一 | 测试项目二 | 测试项目三 ",
+                data6:"可预约项目：上门理发 | 上门按摩",
+                allButtons:[
+                    {
+                        name:'小病自测',
+                        url:"./htmls/page1.html"
+                    },
+                    {
+                        name:'大病问诊',
+                        url:"./htmls/page2.html"
+                    },
+                    {
+                        name:'定期上门检查',
+                        url:"./htmls/page3.html"
+                    },
+                    {
+                        name:'紧急送药',
+                        url:"./htmls/page4.html"
+                    },
+                    {
+                        name:'心理健康调查与疏导',
+                        url:"./htmls/page5.html"
+                    },
+                    {
+                        name:'老人儿童关怀服务',
+                        url:"./htmls/page6.html"
+                    }],
+                newsDatas:[
+                    {
+                        title:"新闻",
+                        data:"付伙食费hi撒粉丝覅私家飞机设计粉红色蒋见附件觉得解放军是否解决是否解决咖啡色款福克斯款福" +
+                            "克斯康复科费计算及附加时间方式解决金佛的佛教是奇偶放假时间福建师范仅仅是放假时间放假时间放假时间副书记"
+                    },
+                    {
+                        title:"公告",
+                        data:"付伙食费hi撒粉丝覅私家飞机设计费计算及附加时间方式解决金佛的佛教是奇偶放假时间福建师范仅仅是放假时间放假时间放假时间副书记"
+                    },
+                    {
+                        title:"健康小贴士",
+                        data:"少吃高盐、高脂、高能量食物,最朴素的、最天然的才是最健康的. 别偏食,食物种类越多越好. 吃饭的时候,尽可能细嚼慢咽."
+                    }
+                ],
+                ourDatas:['关于我们','工作室','地址','电话','邮箱','投诉与建议','合作联系','法律团队']
+
+
+            }
+        }
+
+    })
+
+</script>
+<!--    <div v-for="i in 10" style="width: 100px;height: 100px;background-color: red"></div>-->
+</body>
+</html>

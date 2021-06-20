@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>小病自测</title>
+
+    <script src="../js/vue.js"></script>
+    <link href="../css/allCss.css" rel="stylesheet" type="text/css"/>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        body{
+            width: 100%;
+            height: 100%;
+        }
+        .hover-not{
+            color: #5c5a5a;
+        }
+        .hover-on:hover{
+            color: #f80000;
+        }
+        a{
+            text-decoration: none;
+        }
+
+        .v-enter,
+        .v-leave-to
+        {
+            opacity: 0;
+            transform: translateX(80px);
+        }
+
+        .v-enter-active,
+        .v-leave-active{
+            transition: all 0.5s ease;
+        }
+
+        .my-enter,
+        .my-leave-to{
+            opacity: 0;
+            transform: translateY(80px);
+        }
+
+        .my-enter-active,
+        .my-leave-active{
+            transition: all 0.5s ease 0.5s;
+        }
+    </style>
+
+</head>
+<body>
+<div id="app" style="width: 800px;height: 700px;margin: 10px auto;border: 1px solid #00C6A9;">
+<!--    头部-->
+    <div class="flex back-color" style="width: 100%;height: 100px;">
+        <img src="../img/yixiangqingyuan.jpg" class="m-t2 m-l2" style="width: 55px;height: 55px;border: 1px solid black">
+        <div class="flex flex-column" style="width: 88%">
+            <div class="flex justify-between m-t2 m-l1" style="width: 100%;">
+                <h3>疾病自测</h3>
+                <div class="flex">
+                    <p>症状：</p>
+                    <input type="text" style="width: 180px;padding-left: 6px" placeholder="请输入你的症状，并点击确认">
+                    <button @click="fun()" class="m-l1 m-r1" style="width: 55px;">确认</button>
+                    <button @click="clearAll()" class="m-r1" style="width: 55px;">清空</button>
+                    <p class="m-l1 hover-on">账号</p>
+                </div>
+            </div>
+            <p class="m-t1 m-l2" style="font-size: 14px">或者选择下列症状，点确认，系统将为您诊断出相应疾病。（说明：该数据多为常见病症，且作参考）</p>
+        </div>
+    </div>
+
+<!--    症状-->
+    <div class="flex" style="width: 100%;height: 450px;">
+<!--        左侧症状-->
+        <div class="flex flex-column" style="width: 49.5%">
+            <div style="width: 100%;height: 165px;border: 1px solid black">
+                <h4 class="m-t1 m-l2">全身症状</h4>
+                <div class="flex flex-wrap m-l1" >
+                    <div class="flex justify-start align-center" v-for="(item,index) in list1" :key="index" style="width: 120px;height: 25px;margin: 3px;">
+                        <input  type="checkbox" v-model="item.isOn" name="" value="23" style="width: 18px;height: 18px;margin-right: 4px">
+                        <p>{{item.name}}</p>
+                    </div>
+                </div>
+            </div>
+            <div style="width: 100%;height: 95px;border: 1px solid black">
+                <h4 class="m-t1 m-l2">胸部症状</h4>
+                <div class="flex flex-wrap m-l1" >
+                    <div class="flex justify-start align-center" v-for="(item,index) in list2" :key="index" style="width: 120px;height: 25px;margin: 3px;">
+                        <input  type="checkbox" v-model="item.isOn" name="" value="23" style="width: 18px;height: 18px;margin-right: 4px">
+                        <p>{{item.name}}</p>
+                    </div>
+                </div>
+            </div>
+            <div style="width: 100%;height: 70px;border: 1px solid black">
+                <h4 class="m-t1 m-l2">四肢症状</h4>
+                <div class="flex flex-wrap m-l1" >
+                    <div class="flex justify-start align-center" v-for="(item,index) in list3" :key="index" style="width: 120px;height: 25px;margin: 3px;">
+                        <input  type="checkbox" v-model="item.isOn" name="" value="23" style="width: 18px;height: 18px;margin-right: 4px">
+                        <p>{{item.name}}</p>
+                    </div>
+                </div>
+            </div>
+            <div style="width: 100%;height: 125px;border: 1px solid black">
+                <h4 class="m-t1 m-l2">分泌排泄症状</h4>
+                <div class="flex flex-wrap m-l1" >
+                    <div class="flex justify-start align-center" v-for="(item,index) in list4" :key="index" style="width: 120px;height: 25px;margin: 3px;">
+                        <input  type="checkbox" v-model="item.isOn" name="" value="23" style="width: 18px;height: 18px;margin-right: 4px">
+                        <p>{{item.name}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+<!--        右侧症状-->
+        <div class="flex flex-column" style="width: 50%">
+            <div style="width: 100%;height: 165px;border: 1px solid black">
+                <h4 class="m-t1 m-l2">头颈症状</h4>
+                <div class="flex flex-wrap m-l1" >
+                    <div class="flex justify-start align-center" v-for="(item,index) in list5" :key="index" style="width: 120px;height: 25px;margin: 3px;">
+                        <input  type="checkbox" v-model="item.isOn" name="" value="23" style="width: 18px;height: 18px;margin-right: 4px">
+                        <p>{{item.name}}</p>
+                    </div>
+                </div>
+            </div>
+            <div style="width: 100%;height: 95px;border: 1px solid black">
+                <h4 class="m-t1 m-l2">腰部症状</h4>
+                <div class="flex flex-wrap m-l1" >
+                    <div class="flex justify-start align-center" v-for="(item,index) in list6" :key="index" style="width: 120px;height: 25px;margin: 3px;">
+                        <input  type="checkbox" v-model="item.isOn" name="" value="23" style="width: 18px;height: 18px;margin-right: 4px">
+                        <p>{{item.name}}</p>
+                    </div>
+                </div>
+            </div>
+            <div style="width: 100%;height: 70px;border: 1px solid black">
+                <h4 class=" m-l2">皮肤症状</h4>
+                <div class="flex flex-wrap m-l1" >
+                    <div class="flex justify-start align-center" v-for="(item,index) in list7" :key="index" style="width: 120px;height: 17px;margin: 3px;">
+                        <input  type="checkbox" v-model="item.isOn" name="" value="23" style="width: 18px;height: 18px;margin-right: 4px">
+                        <p>{{item.name}}</p>
+                    </div>
+                </div>
+            </div>
+            <div style="width: 100%;height: 125px;border: 1px solid black">
+                <h4 class="m-t1 m-l2">两性症状</h4>
+                <div class="flex flex-wrap m-l1" >
+                    <div class="flex justify-start align-center" v-for="(item,index) in list8" :key="index" style="width: 120px;height: 25px;margin: 3px;">
+                        <input  type="checkbox" v-model="item.isOn" name="" value="23" style="width: 18px;height: 18px;margin-right: 4px">
+                        <p>{{item.name}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+<!--    其他症状-->
+    <div style="width: 100%;height: 100px;">
+        <div style="width: 99.5%;height: 100px;border: 1px solid black">
+            <h4 class="m-t2 m-l2">其他症状</h4>
+            <div class="flex flex-wrap m-l1" >
+                <div class="flex justify-start align-center" v-for="(item,index) in list9" :key="index" style="width: 120px;height: 25px;margin: 3px;">
+                    <input  type="checkbox" v-model="item.isOn" name="" value="23" style="width: 18px;height: 18px;margin-right: 4px">
+                    <p>{{item.name}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<!--    尾部-->
+    <div class="flex align-center back-color" style="width: 100%;height: 50px;">
+        <div class="flex m-l3" style="width: 100%">
+            <div class="flex-1 ">
+                <p class="hover-on" style="width: 70px">关于我们</p>
+            </div>
+            <div class="flex-1 ">
+                <p class="hover-on" style="width: 80px">投诉与建议</p>
+            </div>
+            <div class="flex-1 ">
+                <p class="hover-on" style="width: 80px">合作与联系</p>
+            </div>
+        </div>
+        <a href="../index.html"><button style="width: 60px;margin-right: 10px">返回</button></a>
+    </div>
+
+
+
+
+    <div v-show="boxShow" class="flex align-center justify-center" style="position: fixed;top: 200px;width: 800px;">
+
+        <!--    确认窗-->
+        <transition>
+            <div v-show="isShow" style="width: 440px;height: 320px;background-color: #cad9d9">
+                <div class="flex flex-column align-center" style="margin: 20px auto;width: 400px;height: 220px; ">
+                    <h3 class=" m-b3">请确认你的所有症状</h3>
+                    <textarea v-model="returnText" style="resize: none;width: 350px;height: 170px;padding: 20px;font-size: 15px"></textarea>
+                </div>
+                <div class="flex justify-between align-center" style="width: 100%;height: 60px">
+                    <button @click="yesDown" class="m-l3" style="width: 130px;height: 40px;font-size: 20px">确认</button>
+                    <button @click="noDown" class="m-r3" style="width: 130px;height: 40px;font-size: 20px">取消</button>
+                </div>
+            </div>
+        </transition>
+
+        <!--    结果显示-->
+        <transition name="my">
+            <div v-show="isShowResult" style="width: 440px;height: 320px;background-color: #cad9d9">
+                <div class="flex justify-center align-center" style="width: 100%;height: 60px;background-color: #00C6A9">
+                    <h3 style="background-color: #00C6A9">你可能患的疾病</h3>
+                </div>
+                <div class="flex flex-column align-center" style="margin: 20px auto;width: 400px;height: 220px;">
+                    <textarea v-model="resultText" style="resize: none;width: 350px;height: 170px;padding: 20px;font-size: 15px"></textarea>
+                </div>
+                <div class="flex justify-center align-center" style="width: 100%;height: 60px;background-color: #00C6A9">
+                    <button @click="resultDowm" style="width: 130px;height: 40px;font-size: 20px">确认</button>
+                </div>
+            </div>
+        </transition>
+
+    </div>
+</div>
+
+
+
+
+<script>
+
+    //创建一个vue实例--与ID为root的结点进行绑定--data 是vue实例中的一些数据存放地点
+
+    new Vue({
+        el:"#app",
+        data(){
+            return{
+                value1:"",
+                allSymptom:"",
+                isShow:false,
+                isShowResult:false,
+                boxShow:false,
+                resultText:'胃肠道伴癌综合征(胃肠道伴癌综合征)。', //疾病结果
+                returnText:"", //所有症状选择
+                list1:[
+                    {
+                        name:"疲劳",
+                        isOn:false
+                    },
+                    {
+                        name:"身痛",
+                        isOn:false
+                    },
+                    {
+                        name:"贫血",
+                        isOn:false
+                    },
+                    {
+                        name:"消瘦",
+                        isOn:false
+                    },
+                    {
+                        name:"出汗异常",
+                        isOn:false
+                    },
+                    {
+                        name:"腰背痛",
+                        isOn:false
+                    },
+                    {
+                        name:"昏迷",
+                        isOn:false
+                    },
+                    {
+                        name:"发热",
+                        isOn:false
+                    },
+                    {
+                        name:"神经痛",
+                        isOn:false
+                    },
+                    {
+                        name:"抽筋",
+                        isOn:false
+                    },
+                    {
+                        name:"休克",
+                        isOn:false
+                    },
+                    {
+                        name:"脱水",
+                        isOn:false
+                    },
+                ],
+                list2:[
+                    {
+                        name:"胸痛",
+                        isOn:false
+                    },
+                    {
+                        name:"心悸",
+                        isOn:false
+                    },
+                    {
+                        name:"心律失常",
+                        isOn:false
+                    },
+                    {
+                        name:"心力衰竭",
+                        isOn:false
+                    },
+                    {
+                        name:"心音异常",
+                        isOn:false
+                    },
+                    {
+                        name:"胸腔积液",
+                        isOn:false
+                    },
+                ],
+                list3:[
+                    {
+                        name:"关节疼痛",
+                        isOn:false
+                    },
+                    {
+                        name:"指甲异常",
+                        isOn:false
+                    },
+                    {
+                        name:"不自主运动",
+                        isOn:false
+                    },
+                ],
+                list4:[
+                    {
+                        name:"少尿",
+                        isOn:false
+                    },
+                    {
+                        name:"黑便",
+                        isOn:false
+                    },
+                    {
+                        name:"多尿",
+                        isOn:false
+                    },
+                    {
+                        name:"便秘",
+                        isOn:false
+                    },
+                    {
+                        name:"便血",
+                        isOn:false
+                    },
+                    {
+                        name:"白带",
+                        isOn:false
+                    },
+                    {
+                        name:"血尿",
+                        isOn:false
+                    },
+                    {
+                        name:"尿失禁与遗尿",
+                        isOn:false
+                    },
+                    {
+                        name:"尿频尿急尿病",
+                        isOn:false
+                    },
+                ],
+                list5:[
+                    {
+                        name:"耳痛",
+                        isOn:false
+                    },
+                    {
+                        name:"颈肩痛",
+                        isOn:false
+                    },
+                    {
+                        name:"头痛",
+                        isOn:false
+                    },
+                    {
+                        name:"耳鸣",
+                        isOn:false
+                    },
+                    {
+                        name:"咽痛",
+                        isOn:false
+                    },
+                    {
+                        name:"溃疡",
+                        isOn:false
+                    },
+                    {
+                        name:"鼻出血",
+                        isOn:false
+                    },
+                    {
+                        name:"眼痛",
+                        isOn:false
+                    },
+                    {
+                        name:"眩晕",
+                        isOn:false
+                    },
+                    {
+                        name:"恶心、呕吐",
+                        isOn:false
+                    },
+                    {
+                        name:"咳嗽",
+                        isOn:false
+                    },
+                    {
+                        name:"红眼",
+                        isOn:false
+                    },
+                ],
+                list6:[
+                    {
+                        name:"腹痛",
+                        isOn:false
+                    },
+                    {
+                        name:"腹泻",
+                        isOn:false
+                    },
+                    {
+                        name:"腹水",
+                        isOn:false
+                    },
+                    {
+                        name:"肝肿大",
+                        isOn:false
+                    },
+                    {
+                        name:"胃肠气胀",
+                        isOn:false
+                    },
+                    {
+                        name:"肺水肿",
+                        isOn:false
+                    },
+                ],
+                list7:[
+                    {
+                        name:"风团",
+                        isOn:false
+                    },
+                    {
+                        name:"疱疹",
+                        isOn:false
+                    },
+                    {
+                        name:"瘙痒",
+                        isOn:false
+                    },
+                    {
+                        name:"脓疱",
+                        isOn:false
+                    },
+                    {
+                        name:"丘疹",
+                        isOn:false
+                    },
+                    {
+                        name:"水肿",
+                        isOn:false
+                    },
+                ],
+                list8:[
+                    {
+                        name:"阴道出血",
+                        isOn:false
+                    },
+                    {
+                        name:"闭经",
+                        isOn:false
+                    },
+                    {
+                        name:"痛经",
+                        isOn:false
+                    },
+                    {
+                        name:"阴囊肿大",
+                        isOn:false
+                    },
+                    {
+                        name:"囊肿",
+                        isOn:false
+                    },
+                    {
+                        name:"男子性功能障碍",
+                        isOn:false
+                    },
+                    {
+                        name:"性早熟",
+                        isOn:false
+                    },
+                    {
+                        name:"女性不孕",
+                        isOn:false
+                    },
+                    {
+                        name:"男性不育",
+                        isOn:false
+                    },
+                ],
+                list9:[
+                    {
+                        name:"低血压",
+                        isOn:false
+                    },
+                    {
+                        name:"高血压",
+                        isOn:false
+                    },
+                    {
+                        name:"低血糖症",
+                        isOn:false
+                    },
+                    {
+                        name:"淋巴肿大",
+                        isOn:false
+                    },
+                    {
+                        name:"骨质疏松",
+                        isOn:false
+                    },
+                    {
+                        name:"甲状腺肿",
+                        isOn:false
+                    },
+                ],
+
+            }
+        },
+        methods:{
+            fun(){
+                this.allSymptom = "";
+                let all = [...this.list1,...this.list2,...this.list3,...this.list4,...this.list5,...this.list6,...this.list7,...this.list8,...this.list9]
+                for (let i=0;i<all.length;i++){
+                    if(all[i].isOn){
+                        this.allSymptom=this.allSymptom+(this.allSymptom == '' ? '' : ',')+all[i].name;
+                    }
+                }
+                console.log(this.allSymptom)
+                this.returnText = this.allSymptom
+                this.boxShow = true;
+                this.isShow = true;
+
+            },
+            clearAll(){
+                let all = [...this.list1,...this.list2,...this.list3,...this.list4,...this.list5,...this.list6,...this.list7,...this.list8,...this.list9]
+                for (let i=0;i<all.length;i++){
+                    all[i].isOn = false;
+                }
+            },
+            yesDown(){
+                this.isShow = false
+                this.isShowResult = true
+
+            },
+            resultDowm(){
+                this.isShowResult = false
+            },
+            noDown(){
+                this.isShow = false
+                setTimeout(()=>{
+                    this.boxShow = false
+                },500)
+            }
+
+        }
+
+    })
+
+</script>
+</body>
+</html>

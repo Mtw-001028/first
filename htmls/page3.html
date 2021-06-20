@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>定期上门检查</title>
+
+    <script src="../js/vue.js"></script>
+    <link href="../css/allCss.css" rel="stylesheet" type="text/css"/>
+    <link href="../css/icon.css" rel="stylesheet" type="text/css"/>
+
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        body{
+            width: 100%;
+            height: 100%;
+        }
+        .hover-not{
+            color: #5c5a5a;
+        }
+        .hover-on:hover{
+            color: #f80000;
+        }
+        a{
+            text-decoration: none;
+        }
+    </style>
+
+</head>
+<body>
+<div id="app" style="width: 800px;height: 700px;margin: 10px auto;border: 1px solid #00C6A9;">
+    <!--    头部-->
+    <div class="flex back-color" style="width: 100%;height: 100px;">
+        <img src="../img/yixiangqingyuan.jpg" class="m-t2 m-l2" style="width: 55px;height: 55px;border: 1px solid black">
+        <div class="flex flex-column" style="width: 88%">
+            <div class="flex justify-between m-t2 m-l1" style="width: 100%;">
+                <h3>定期上门检查</h3>
+                <div class="flex">
+                    <p class="iconfont icon-dizhi"></p>
+                    <p class="hover-on">你的位置</p>
+                    <p class="iconfont icon-zhifubao m-l1"></p>
+                    <p class="hover-on" style="margin-left: 3px">账号</p>
+                </div>
+            </div>
+            <p class="m-t1 m-l2" style="font-size: 17px">请选择您所需要的服务并预约上门时间</p>
+        </div>
+    </div>
+
+    <!--主体-->
+    <div class="flex flex-wrap" style="width: 100%;height: 550px;">
+        <div v-for="(item,index) in list" :key="index" class="flex flex-column m-t1 m-l2" style="width: 46%;height: 250px;
+        background-color: #b8eee3;margin-right: 1%">
+            <div style="width: 100%;height: 50px;background-color: #66daee">
+                <h3 class="m-t1 m-l5">{{item.name}}</h3>
+            </div>
+            <div class="flex m-t2" style="width: 100%;">
+                <div class=" flex flex-column" style="width: 100px">
+                    <p class=" p-l2" style="font-size: 15px">上门时间</p>
+                </div>
+                <div class="flex flex-column" style="width: 306px">
+                    <div v-for="(item1,index1) in item.list1" :key="index1" class="flex align-center">
+                        <p style="font-size: 14px;margin-top: 3px">{{item1.name}} 上午9:00-11:00</p>
+                        <input  type="radio" v-model="item.getTheData" :name="index" :value="item1.isOnUp" style="width: 18px;height: 18px;margin-top: 4px;
+                        margin-left: 4px;margin-right: 5px">
+                        <p style="font-size: 14px;margin-top: 3px"> 下午3:00-5:00</p>
+                        <input  type="radio" v-model="item.getTheData" :name="index" :value="item1.isOnDown" style="width: 18px;height: 18px;margin-top: 4px;
+                        margin-left: 4px">
+
+                    </div>
+                </div>
+<!--                <div class=" flex flex-column" style="width: 130px">-->
+<!--                    <div v-for="(item2,index2) in list1" :key="index2"  class="flex">-->
+<!--                        <p style="font-size: 14px;margin-top: 3px">下午3:00-5:00</p>-->
+<!--                        <input  type="radio" v-model="item2.isOn" name="1" value="23" style="width: 18px;height: 18px;margin-top: 4px;margin-left: 4px">-->
+<!--                    </div>-->
+<!--                </div>-->
+            </div>
+            <div class="flex justify-center">
+                <button @click="getMyData(index)">确定预约</button>
+            </div>
+        </div>
+
+        <p style="font-size: 17px;line-height: 20px;text-align: center;width: 100%">更多服务正在添加......</p>
+    </div>
+
+    <!--    尾部-->
+    <div class="flex align-center back-color" style="width: 100%;height: 50px;">
+        <div class="flex m-l3" style="width: 100%">
+            <div class="flex-1 ">
+                <p class="hover-on" style="width: 70px">关于我们</p>
+            </div>
+            <div class="flex-1 ">
+                <p class="hover-on" style="width: 80px">投诉与建议</p>
+            </div>
+            <div class="flex-1 ">
+                <p class="hover-on" style="width: 80px">合作与联系</p>
+            </div>
+        </div>
+        <a href="../index.html"><button style="width: 60px;margin-right: 10px">返回</button></a>
+    </div>
+
+    <!--    结果显示-->
+    <div v-show="isShow" class="flex align-center justify-center" style="position: fixed;top: 100px;width: 800px;">
+        <div  style="width: 440px;height: 200px;position: fixed;top: 250px;background-color: #cad9d9">
+            <div class="flex justify-center align-center" style="width: 100%;height: 50px;background-color: #00C6A9">
+
+            </div>
+            <div class="flex flex-column align-center justify-center" style="margin: 20px auto;width: 400px;height: 90px;">
+                <p>你是否预约服务：{{list[index].name}}</p>
+                <p style="margin-top: 20px">预约时间为：{{list[index].getTheData}}</p>
+            </div>
+            <div class="flex justify-center align-center" style="width: 100%;height: 60px;background-color: #00C6A9">
+                <button @click="resultDowm" style="width: 130px;height: 40px;font-size: 20px">确认</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+    //创建一个vue实例--与ID为root的结点进行绑定--data 是vue实例中的一些数据存放地点
+
+    new Vue({
+        el:"#app",
+        data(){
+            return{
+                // getTheData:true,
+                isShow:false,
+                index:0,
+                list:[
+                    {
+                        name:"测量血压  3元/次",
+                        list1:[
+                            {
+                                name:'周一 ',
+                                isOnUp:'周一 上午9:00-11:00',
+                                isOnDown:'周一 下午3:00-5:00'
+                            },
+                            {
+                                name:'周二 ',
+                                isOnUp:'周二 上午9:00-11:00',
+                                isOnDown:'周二 下午3:00-5:00'
+                            },
+                            {
+                                name:'周三 ',
+                                isOnUp:'周三 上午9:00-11:00',
+                                isOnDown:'周三 下午3:00-5:00'
+                            },
+                            {
+                                name:'周四 ',
+                                isOnUp:'周四 上午9:00-11:00',
+                                isOnDown:'周四 下午3:00-5:00'
+                            },
+                            {
+                                name:'周五 ',
+                                isOnUp:'周五 上午9:00-11:00',
+                                isOnDown:'周五 下午3:00-5:00'
+                            },
+                            {
+                                name:'周六 ',
+                                isOnUp:'周六 上午9:00-11:00',
+                                isOnDown:'周六 下午3:00-5:00'
+                            },
+                            {
+                                name:'周日 ',
+                                isOnUp:'周日 上午9:00-11:00',
+                                isOnDown:'周日 下午3:00-5:00'
+                            }
+                        ],
+                        getTheData:'',
+                    },
+                    {
+                        name:"针灸按摩  30元/次（每次30分钟）",
+                        list1:[
+                            {
+                                name:'周一 ',
+                                isOnUp:'周一 上午9:00-11:00',
+                                isOnDown:'周一 下午3:00-5:00'
+                            },
+                            {
+                                name:'周二 ',
+                                isOnUp:'周二 上午9:00-11:00',
+                                isOnDown:'周二 下午3:00-5:00'
+                            },
+                            {
+                                name:'周三 ',
+                                isOnUp:'周三 上午9:00-11:00',
+                                isOnDown:'周三 下午3:00-5:00'
+                            },
+                            {
+                                name:'周四 ',
+                                isOnUp:'周四 上午9:00-11:00',
+                                isOnDown:'周四 下午3:00-5:00'
+                            },
+                            {
+                                name:'周五 ',
+                                isOnUp:'周五 上午9:00-11:00',
+                                isOnDown:'周五 下午3:00-5:00'
+                            },
+                            {
+                                name:'周六 ',
+                                isOnUp:'周六 上午9:00-11:00',
+                                isOnDown:'周六 下午3:00-5:00'
+                            },
+                            {
+                                name:'周日 ',
+                                isOnUp:'周日 上午9:00-11:00',
+                                isOnDown:'周日 下午3:00-5:00'
+                            }
+                        ],
+                        getTheData:true,
+                    },
+                    {
+                        name:"保健  20元/次（每次30分钟）",
+                        list1:[
+                            {
+                                name:'周一 ',
+                                isOnUp:'周一 上午9:00-11:00',
+                                isOnDown:'周一 下午3:00-5:00'
+                            },
+                            {
+                                name:'周二 ',
+                                isOnUp:'周二 上午9:00-11:00',
+                                isOnDown:'周二 下午3:00-5:00'
+                            },
+                            {
+                                name:'周三 ',
+                                isOnUp:'周三 上午9:00-11:00',
+                                isOnDown:'周三 下午3:00-5:00'
+                            },
+                            {
+                                name:'周四 ',
+                                isOnUp:'周四 上午9:00-11:00',
+                                isOnDown:'周四 下午3:00-5:00'
+                            },
+                            {
+                                name:'周五 ',
+                                isOnUp:'周五 上午9:00-11:00',
+                                isOnDown:'周五 下午3:00-5:00'
+                            },
+                            {
+                                name:'周六 ',
+                                isOnUp:'周六 上午9:00-11:00',
+                                isOnDown:'周六 下午3:00-5:00'
+                            },
+                            {
+                                name:'周日 ',
+                                isOnUp:'周日 上午9:00-11:00',
+                                isOnDown:'周日 下午3:00-5:00'
+                            }
+                        ],
+                        getTheData:true,
+                    },
+                    {
+                        name:"康复训练  20元/次（每次30分钟）",
+                        list1:[
+                            {
+                                name:'周一 ',
+                                isOnUp:'周一 上午9:00-11:00',
+                                isOnDown:'周一 下午3:00-5:00'
+                            },
+                            {
+                                name:'周二 ',
+                                isOnUp:'周二 上午9:00-11:00',
+                                isOnDown:'周二 下午3:00-5:00'
+                            },
+                            {
+                                name:'周三 ',
+                                isOnUp:'周三 上午9:00-11:00',
+                                isOnDown:'周三 下午3:00-5:00'
+                            },
+                            {
+                                name:'周四 ',
+                                isOnUp:'周四 上午9:00-11:00',
+                                isOnDown:'周四 下午3:00-5:00'
+                            },
+                            {
+                                name:'周五 ',
+                                isOnUp:'周五 上午9:00-11:00',
+                                isOnDown:'周五 下午3:00-5:00'
+                            },
+                            {
+                                name:'周六 ',
+                                isOnUp:'周六 上午9:00-11:00',
+                                isOnDown:'周六 下午3:00-5:00'
+                            },
+                            {
+                                name:'周日 ',
+                                isOnUp:'周日 上午9:00-11:00',
+                                isOnDown:'周日 下午3:00-5:00'
+                            }
+                        ],
+                        getTheData:true,
+                    },
+
+                ],
+                list1:['周一 ','周二 ','周三 ','周四 ','周五 ','周六 ','周日 ']
+            }
+        },
+        methods:{
+            getMyData(index){
+                if(this.list[index].getTheData == '') return;
+                console.log(index)
+                this.index = index;
+                console.log(this.list[index].getTheData)
+                this.isShow = true
+            },
+            resultDowm(){
+                this.isShow = false
+            }
+        }
+
+    })
+
+</script>
+</body>
+</html>

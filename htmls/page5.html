@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>心理</title>
+
+    <script src="../js/vue.js"></script>
+    <link href="../css/allCss.css" rel="stylesheet" type="text/css"/>
+    <link href="../css/icon.css" rel="stylesheet" type="text/css"/>
+
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        body{
+            width: 100%;
+            height: 100%;
+        }
+        .hover-not{
+            color: #5c5a5a;
+        }
+        .hover-on:hover{
+            color: #f80000;
+        }
+        a{
+            text-decoration: none;
+        }
+    </style>
+
+</head>
+<body>
+<div id="app" style="width: 800px;height: 700px;margin: 10px auto;border: 1px solid #00C6A9;">
+    <!--    头部-->
+    <div class="flex back-color" style="width: 100%;height: 100px;">
+        <img src="../img/yixiangqingyuan.jpg" class="m-t2 m-l2" style="width: 55px;height: 55px;border: 1px solid black">
+        <div class="flex flex-column" style="width: 88%">
+            <div class="flex justify-between m-t2 m-l1" style="width: 100%;">
+                <h3>心理健康测试与疏导</h3>
+                <div class="flex">
+                    <p class="iconfont icon-dizhi"></p>
+                    <p class="hover-on">你的位置</p>
+                    <p class="iconfont icon-zhifubao m-l1"></p>
+                    <p class="hover-on" style="margin-left: 3px">账号</p>
+                </div>
+            </div>
+            <p class="m-t1 m-l2" style="font-size: 17px">你可根据需要选择下方的服务</p>
+        </div>
+    </div>
+
+    <!--    主体-->
+    <div class="flex flex-column" style="width: 100%;height: 550px;">
+        <div class="flex-1 flex " style="width: 100%;background-color: #e7dcdc">
+            <div class="flex-1 flex align-center flex-column" style="border-right: 1px solid black">
+                <h3 class="m-t3 m-b2">线上心理测试</h3>
+<!--                试题集合-->
+                <div class="flex align-center justify-center flex-wrap" style="width: 250px;height: 120px;overflow: scroll">
+                    <p @click="toTest(index)" v-for="(item,index) in myTestList" :key="index" class="m-r2 text-main hover-on" style="height: 30px">{{item.title}}</p>
+                </div>
+                <p class="m-t1" style="font-size: 15px">更多试题正在添加......</p>
+            </div>
+            <div class="flex-1 flex align-center flex-column">
+                <h3 class="m-t3 m-b2">心理状况自述</h3>
+                <textarea v-model="request" class="p1" style="resize: none;width: 220px;height: 110px" placeholder="（请您描述您目前内心的真实想法与感受）"></textarea>
+                <button @click="getResult" class="m-t1" style="width: 60px">提交</button>
+            </div>
+        </div>
+        <div class="flex-1 flex flex-column align-center" style="width: 100%;background-color: #b8eee3">
+            <h3 class="m-t3 m-b2">上门心理疏导服务预约</h3>
+            <div class="flex ">
+                <textarea v-model="allMsg" class="p1 m-r4" style="resize: none;width: 220px;height: 110px" placeholder="（请填下您的姓名、电话地址以及希望上门服务的时间）"></textarea>
+                <textarea v-model="forHelp" class="p1" style="resize: none;width: 220px;height: 110px" placeholder="（请填下您的心理诉求与需要的帮助）"></textarea>
+            </div>
+            <button @click="submitMyMsg" class="m-t1" style="width: 60px">提交</button>
+        </div>
+        <p style="width: 100%;height: 50px;line-height: 50px;text-align: center">心理辅导费用说明，首次免费，测试免费，上门检查与疏导50-100元/次</p>
+    </div>
+
+    <!--    尾部-->
+    <div class="flex align-center back-color" style="width: 100%;height: 50px;">
+        <div class="flex m-l3" style="width: 100%">
+            <div class="flex-1 ">
+                <p class="hover-on" style="width: 70px">关于我们</p>
+            </div>
+            <div class="flex-1 ">
+                <p class="hover-on" style="width: 80px">投诉与建议</p>
+            </div>
+            <div class="flex-1 ">
+                <p class="hover-on" style="width: 80px">合作与联系</p>
+            </div>
+        </div>
+        <a href="../index.html"><button style="width: 60px;margin-right: 10px">返回</button></a>
+    </div>
+
+
+<!--    显示框-->
+    <div v-if="isShow || isShowTest" class="flex align-center justify-center" style="position: fixed;top: 10px;width: 800px;height: 700px;">
+
+        <div v-show="isShowTest" class="flex align-center justify-center" style="width: 400px;height: 200px;background-color: #d0d6d9">
+            <textarea v-model="titleMsg" disabled style="resize: none;border: none;width: 250px;
+                height: 150px;padding: 10px;font-size: 15px;background-color: white"></textarea>
+        </div>
+
+        <div class="flex flex-column" v-show="isShow" style="width: 800px;height: 700px;background-color: #d0d6d9">
+            <div class="flex align-center justify-center" style="width: 100%;height: 80px;background-color: #007bff">
+                <p>{{testTitle}}</p>
+            </div>
+            <div class="flex align-center justify-center" style="width: 100%;height: 640px;background-color: #ffffff">
+                <div class="p1" style="width: 600px;height: 500px;">
+                    <p v-for="i in 5" style="line-height: 60px;font-size: 25px;">{{i}}、你对生活有希望吗?</p>
+                </div>
+            </div>
+            <div class="flex align-center justify-center" style="width: 100%;height: 80px;background-color: #007bff">
+                <button @click="testMyrequest" class="m-t1" style="width: 80px">提交</button>
+                <button @click="back" class="m-t1" style="width: 80px">返回</button>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+<script>
+
+    //创建一个vue实例--与ID为root的结点进行绑定--data 是vue实例中的一些数据存放地点
+
+    new Vue({
+        el:"#app",
+        data(){
+            return{
+                index:0,
+                testTitle:'',
+                titleMsg:'',
+                titleMsg1:'平台已接收您的预约，我们将在指定时间内上门为您服务。祝你生活愉快！',
+                titleMsg2:'您的心理状况自述已提交，系统正在为您分析，请耐心等候......',
+                request:'',
+                allMsg:'',
+                forHelp:'',
+                isShow:false,
+                isShowTest:false,
+                myTestList:[
+                    {
+                        title:'测试题（一）',
+                        msgList:[]
+                    },
+                    {
+                        title:'测试题（二）',
+                        msgList:[]
+                    },
+                    {
+                        title:'测试题（三）',
+                        msgList:[]
+                    },
+                    {
+                        title:'测试题（四）',
+                        msgList:[]
+                    },
+                    {
+                        title:'测试题（五）',
+                        msgList:[]
+                    },
+                    {
+                        title:'测试题（六）',
+                        msgList:[]
+                    },
+                ]
+            }
+        },
+        methods:{
+            toTest(index){
+                this.index = index
+                this.testTitle = this.myTestList[index].title
+                console.log(this.index)
+                this.isShow = true;
+            },
+            getResult(){
+                if(this.request == '') return;
+                console.log(this.request)
+                this.titleMsg = this.titleMsg2
+                this.isShowTest = true;
+                setTimeout(()=>{
+                    this.isShowTest = false;
+                    this.request = ''
+                },3000)
+
+            },
+            submitMyMsg(){
+                if(this.allMsg == '' || this.forHelp == '') return;
+                console.log(this.allMsg)
+                console.log(this.forHelp)
+                this.titleMsg = this.titleMsg1
+                this.isShowTest = true;
+                setTimeout(()=>{
+                    this.isShowTest = false;
+                    this.allMsg = ''
+                    this.forHelp = ''
+                },3000)
+            },
+            testMyrequest(){
+                this.isShow = false
+            },
+            back(){
+                this.isShow = false
+            }
+        }
+
+    })
+
+</script>
+</body>
+</html>

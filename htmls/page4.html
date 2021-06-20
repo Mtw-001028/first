@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>紧急送药</title>
+
+    <script src="../js/vue.js"></script>
+    <link href="../css/allCss.css" rel="stylesheet" type="text/css"/>
+    <link href="../css/icon.css" rel="stylesheet" type="text/css"/>
+
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        body{
+            width: 100%;
+            height: 100%;
+        }
+        .hover-not{
+            color: #5c5a5a;
+        }
+        .hover-on:hover{
+            color: #f80000;
+        }
+        a{
+            text-decoration: none;
+        }
+    </style>
+
+</head>
+<body>
+<div id="app" style="width: 800px;height: 700px;margin: 10px auto;border: 1px solid #00C6A9;">
+    <!--    头部-->
+    <div class="flex back-color" style="width: 100%;height: 100px;">
+        <img src="../img/yixiangqingyuan.jpg" class="m-t2 m-l2" style="width: 55px;height: 55px;border: 1px solid black">
+        <div class="flex flex-column" style="width: 88%">
+            <div class="flex justify-between m-t1 m-l1" style="width: 100%;">
+                <h3>紧急送药（24小时）</h3>
+                <div class="flex">
+                    <p class="iconfont icon-dizhi"></p>
+                    <p class="hover-on">你的位置</p>
+                    <p class="iconfont icon-zhifubao m-l1"></p>
+                    <p class="hover-on" style="margin-left: 3px">账号</p>
+                </div>
+            </div>
+            <p class="m-l2 " style="font-size: 14px;">请选择您所需要的处方药，我们将派人专门就近配送上门</p>
+            <div class="flex">
+                <div class="flex justify-center m-t1" style="width: 75%">
+                    <input class="p-l1 p-r1" style="height: 30px;width: 220px;font-size: 16px" v-model="search" placeholder="search输入药品名称并按查找" type="text">
+                    <button @click="searchMsg" class="m-l1 m-r3" style="width: 50px;height: 33px;">查找</button>
+                </div>
+                <div class="flex justify-center m-t1" style="width: 25%">
+                    <button @click="showNeed" class="m-r2" style="width: 80px;height: 33px;">我的订单</button>
+                    <button @click="clearNeed" style="width: 80px;height: 33px;">重置订单</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--    主体-->
+    <div style="width: 100%;height: 550px;">
+        <table style="width: 100%;border: 1px solid black">
+            <tr v-for="(item1,index) in allList" :key="index" style="width: 100%;border: 1px solid black">
+                <td @click="showMsgs(index,index1)" v-for="(item,index1) in item1" :key="index1" :style="index1==0 ? 'background-color: #a1a6ac' : ''"
+                    class="p-l1" style="width: 20%;height: 30px;border: 1px solid black;">{{item}}</td>
+            </tr>
+        </table>
+        <p style="width: 100%;height: 50px;line-height: 30px;text-align: center;">配送费用说明：每件3元，药品满50元免费配送</p>
+    </div>
+
+    <!--    尾部-->
+    <div class="flex align-center back-color" style="width: 100%;height: 50px;">
+        <div class="flex m-l3" style="width: 100%">
+            <div class="flex-1 ">
+                <p class="hover-on" style="width: 70px">关于我们</p>
+            </div>
+            <div class="flex-1 ">
+                <p class="hover-on" style="width: 80px">投诉与建议</p>
+            </div>
+            <div class="flex-1 ">
+                <p class="hover-on" style="width: 80px">合作与联系</p>
+            </div>
+        </div>
+        <a href="../index.html"><button style="width: 60px;margin-right: 10px">返回</button></a>
+    </div>
+
+    <!--    结果显示-->
+    <div  class="flex align-center justify-center" style="position: fixed;top: 100px;width: 800px;">
+        <div v-show="isShow" style="width: 640px;height: 500px;background-color: #cad9d9">
+            <div class="flex justify-center align-center" style="width: 100%;height: 50px;background-color: #00b5c6">
+                <p>{{resultText}}</p>
+            </div>
+            <div class="flex flex-column align-center justify-center" style="margin: 20px auto;width: 400px;height: 390px;">
+                <img src="../img/this1.jpg" style="width: 300px;height: 180px">
+                <div class="flex align-center justify-center" style="width: 400px;height: 200px;">
+                    <textarea v-model="resultText" disabled style="resize: none;border: none;margin-top: 10px;margin-right: 5px;width: 350px;
+                height: 140px;padding: 10px;font-size: 15px;background-color: white"></textarea>
+                </div>
+            </div>
+            <div class="flex justify-center align-center" style="width: 100%;height: 60px;background-color: #00b5c6">
+                <button @click="resultDowm" style="width: 130px;height: 40px;font-size: 20px">添加到购物车</button>
+                <button @click="backThis" style="width: 130px;height: 40px;font-size: 20px">取消</button>
+            </div>
+        </div>
+        <div v-show="isShowNeed" style="width: 640px;height: 500px;background-color: #cad9d9">
+            <div class="flex justify-center align-center" style="width: 100%;height: 50px;background-color: #00b5c6">
+                <p>你的订单</p>
+            </div>
+            <div class="flex flex-column align-center justify-center" style="margin: 20px auto;width: 400px;height: 390px;">
+                <p class="m-b1">我选择的药品</p>
+                <div class="flex flex-wrap p1" style="width: 400px;height: 200px;background-color: #ffffff;overflow: scroll">
+                    <p v-for="(item,index) in needList" :key="index" style="font-size: 20px;height: 50px;">{{item + ','}}</p>
+                </div>
+                <div class="flex m-t2" style="width: 400px;height: 90px">
+                    <div class="flex-1">
+                        <p>你的地址</p>
+                        <input v-model="preace" class="p-l1 m-t1" style="height: 25px" type="text">
+                    </div>
+                    <div class="flex-1">
+                        <p>预期送达时间</p>
+                        <input v-model="timeBuy" class="p-l1 m-t1" style="height: 25px" type="date">
+                    </div>
+                </div>
+            </div>
+            <div class="flex justify-center align-center" style="width: 100%;height: 60px;background-color: #00b5c6">
+                <button @click="okBuy" style="width: 130px;height: 40px;font-size: 20px">确定购买</button>
+                <button @click="backThis" style="width: 130px;height: 40px;font-size: 20px">取消</button>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script>
+
+    //创建一个vue实例--与ID为root的结点进行绑定--data 是vue实例中的一些数据存放地点
+
+    new Vue({
+        el:"#app",
+        data(){
+            return{
+                search:'',
+                msgBuy:{},
+                resultText:'',
+                preace:'',
+                timeBuy:'',
+                isShow:false,
+                isShowNeed:false,
+                needList:[],
+                allList:[
+                    ["感冒用药","银翘片和口服液","小柴胡颗粒","999感冒灵","藿香正气水"],
+                    ["妇科用药","叶酸片","艾附暖宫丸","田七痛经胶囊","抗宫炎软胶膏"],
+                    ["验孕避孕","早早孕检测纸","避孕套","左快洛孕通分散片","人体润滑油"],
+                    ["男科用药","补肾强体片","全鹿丸","肾宝片","壮腰健肾片"],
+                    ["儿童用药","小儿感冒颗粒","小儿七星茶颗粒","999感冒灵","藿香正气水"],
+                    ["消化系统","胃肠宁片","人参健脾丸","养胃舒颗粒","木香顺气丸"],
+                    ["呼吸系统","川贝枇杷糖浆","咳送停胶囊","雪梨膏","强力枇杷露"],
+                    ["皮肤用药","碘酊","复方出卖地塞来送乳膏","足光散","阿晋洛韦乳膏"],
+                    ["个人护理","生理性海水鼻腔喷雾器","ABC卫生巾","妇炎洁洗液","舒适达芬奇"],
+                    ["内分泌系统","奥利司他胶囊","参花消渴茶","排毒养颜胶囊","红景天参已胶囊"],
+                    ["神经用药","复方枣仁胶囊","养血清脑胶囊","脑心舒口服液","清眩丸"],
+                    ["清热解毒","和菊五花茶颗粒","蒲公英颗粒","板新根杂","牛黄上清丸"],
+                    ["家庭常备","风油精","医用棉签","云南白药创可贴","医用酒精"],
+                    ["风湿骨科","远红外筋骨伤痛贴","大活络丸","云南药膏","与矫正红花油"],
+                    ["五官用药","清咽片","西地碘含片","珍视明滴眼液","息斯敏氯雷迪定片"]
+                ],
+
+            }
+        },
+        methods:{
+            showMsgs(index,index1){
+                if(index1 == 0) return;
+                console.log(this.allList[index][index1])
+                this.resultText = this.allList[index][index1]
+                this.isShow = true;
+            },
+            showNeed(){
+                this.isShowNeed = true;
+            },
+            clearNeed(){
+                this.needList = []
+            },
+            searchMsg(){
+                if(this.search == '') return;
+                this.resultText = this.search;
+                this.search = ''
+                this.isShow = true
+            },
+            resultDowm(){
+
+                this.needList.push(this.resultText)
+                console.log(this.needList)
+                this.isShow = false;
+            },
+            backThis(){
+                this.isShow = false;
+                this.isShowNeed = false;
+            },
+            okBuy(){
+                this.msgBuy.preace = this.preace
+                this.msgBuy.timeBuy = this.timeBuy
+                this.msgBuy.needList = this.needList
+                console.log(this.msgBuy)
+                this.isShowNeed = false;
+            }
+
+        }
+
+    })
+
+</script>
+</body>
+</html>
